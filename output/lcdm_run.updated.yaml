@@ -1,0 +1,71 @@
+theory:
+  classy:
+    path: null
+    speed: 0.2
+    stop_at_error: false
+    extra_args:
+      output: mPk
+      P_k_max_h/Mpc: 10
+    ignore_obsolete: false
+    use_renames: false
+    renames:
+      As: A_s
+      ns: n_s
+      nrun: alpha_s
+      nrunrun: beta_s
+      nt: n_t
+      ntrun: alpha_t
+      rdrag: rs_drag
+      omegak: Omega_k
+      omegal: Omega_Lambda
+      w: w0_fld
+      wa: wa_fld
+      omegabh2: omega_b
+      omegab: Omega_b
+      omegach2: omega_cdm
+      omegac: Omega_cdm
+      omegam: Omega_m
+      omegan: Omega_nu
+      tau: tau_reio
+      zrei: z_reio
+      deltazrei: reionization_width
+      helium_redshift: helium_fullreio_redshift
+      helium_delta_redshift: helium_fullreio_width
+      yhe: YHe
+      yheused: YHe
+    version: null
+likelihood:
+  dummy_likelihood:
+    type: []
+    speed: -1
+    stop_at_error: false
+    version: null
+    external: true
+params:
+  omega_b:
+    value: 0.0224
+    renames:
+    - omegabh2
+  omega_cdm:
+    value: 0.12
+    renames:
+    - omegach2
+  H0:
+    value: 68.0
+  sum_mnu:
+    value: 0.06
+  w0:
+    value: -1
+  wa:
+    value: 0
+    renames:
+    - wa_fld
+sampler:
+  evaluate:
+    N: 1
+    override: null
+    seed: null
+    version: null
+output: lcdm_run
+packages_path: null
+version: 3.5.7

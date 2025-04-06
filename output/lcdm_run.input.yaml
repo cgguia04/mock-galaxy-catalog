@@ -1,0 +1,19 @@
+theory:
+  classy:
+    extra_args:
+      output: mPk
+      P_k_max_h/Mpc: 10
+likelihood:
+  dummy_likelihood:
+    external: true
+params:
+  omega_b: 0.0224
+  omega_cdm: 0.12
+  H0: 68.0
+  sum_mnu: 0.06
+  w0: -1
+  wa: 0
+sampler:
+  evaluate: null
+output: lcdm_run
+packages_path: null
