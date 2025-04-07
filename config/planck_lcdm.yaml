@@ -1,0 +1,18 @@
+# Planck 2018 best-fit base ΛCDM cosmology
+
+# Background + perturbation parameters
+h: 0.6736
+omega_b: 0.02237
+omega_cdm: 0.12
+n_s: 0.9649
+A_s: 2.0989e-9
+tau_reio: 0.0544
+
+#Neutrino parameters
+N_ncdm: 1
+m_ncdm: 0.06
+N_ur: 2.046  # Because N_eff = 3.046 - 1 massive neutrino
+
+# CLASS output settings
+output: mPk
+P_k_max_h/Mpc: 10
