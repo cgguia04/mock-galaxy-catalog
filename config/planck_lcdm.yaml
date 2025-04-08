@@ -16,3 +16,5 @@ N_ur: 2.046  # Because N_eff = 3.046 - 1 massive neutrino
 # CLASS output settings
 output: mPk
 P_k_max_h/Mpc: 10
+z_pk: [0, 0.5, 1, 2, 3]
+z_max_pk: 3 #store info up to redshift 3
