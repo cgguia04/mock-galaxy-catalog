@@ -1,0 +1,26 @@
+# Planck 2018 best-fit base ΛCDM cosmology
+ 
+ # Background + perturbation parameters
+ h: 0.6736
+ omega_b: 0.02237
+ omega_cdm: 0.12
+ n_s: 0.9649
+ A_s: 2.0989e-9
+ tau_reio: 0.0544
+ 
+ #Neutrino parameters
+ N_ncdm: 1
+ m_ncdm: 0.06
+ N_ur: 2.046         # Because N_eff = 3.046 - 1 massive neutrino
+ 
+ # Dynamical dark energy from DESI DR2 Results II
+ Omega_fld: 0.6847   #Planck
+ w0_fld: -0.838      #DESI+CMB+Pantheon+
+ wa_fld: -0.1        #-0.62 from DESI crashes CLASS
+ use_ppf: yes        #Parameterized Post-Friedmann Framework (allow phantom regime)
+ 
+ # CLASS output settings
+ output: mPk
+ P_k_max_h/Mpc: 10
+ z_pk: [0, 0.5, 1, 2, 3]
+ z_max_pk: 3 #store info up to redshift 3
