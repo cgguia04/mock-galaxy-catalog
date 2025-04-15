@@ -2,4 +2,3 @@ class_public/
 venv/
 __pycache__/
 .DS_Store
-output/
