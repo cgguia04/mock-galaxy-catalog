@@ -16,8 +16,8 @@
  # Dynamical dark energy from DESI DR2 Results II
  Omega_fld: 0.6847   #Planck
  w0_fld: -0.838      #DESI+CMB+Pantheon+
- wa_fld: -0.1        #-0.62 from DESI crashes CLASS
- use_ppf: yes        #Parameterized Post-Friedmann Framework (allow phantom regime)
+ wa_fld: -0.62        #-0.62 from DESI crashes CLASS
+ use_ppf: 'yes'        #Parameterized Post-Friedmann Framework (allow phantom regime)
  
  # CLASS output settings
  output: mPk

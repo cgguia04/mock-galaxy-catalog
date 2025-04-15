@@ -41,23 +41,23 @@
  Output files like:
 
  ``
- output/planck_lcdm/pk_planck_lcdm_z0.txt
+ output/planck_lcdm/pk_pk_planck_lcdm_z0.txt
 ``
 
 ``
- output/planck_lcdm/pk_planck_lcdm_z1.txt
+ output/planck_lcdm/pk_pk_planck_lcdm_z1.txt
 ``
  
  2. Plot Combined Spectra
  To plot all redshift power spectra for a given model:
  ```
- python src/plot_power_spectrum.py output/planck_lcdm
+ python src/plot_power_spectrum.py output/planck_lcdm/pk
  ```
  
  Saves to:
 
  ``
- output/planck_lcdm/pk_planck_lcdm_multi_z.png
+ output/planck_lcdm/pk/pk_planck_lcdm_multi_z.png
  ``
  
  
@@ -87,7 +87,7 @@
  ## Notes
  - Redshifts are defined in YAML with `z_pk: [0, 0.5, 1, 2, 3]`
  - CLASS expects `z_pk` as a space-separated string — this is handled automatically in Python
- - Each model’s results are saved in `output/[model_name]/`
+ - Each model’s results are saved in `output/[model_name]`
  
  ---
  

@@ -21,7 +21,7 @@ if __name__ == "__main__":
         params["z_pk"] = ' '.join(str(z) for z in redshifts)
 
     cosmo = Class() # CLASS instance
-    cosmo.set(params)   # Set cosmological parameters 
+    cosmo.set(params)  # Set cosmological parameters 
     cosmo.compute() # CLASS calculations 
 
     ks = np.logspace(-3, 0, 256)
@@ -31,8 +31,15 @@ if __name__ == "__main__":
 
     for z in redshifts: #compute P(k) at z for each k
         pk_z = np.array([cosmo.pk(k, float(z)) for k in ks])
-        output_txt = os.path.join(output_subdir, f"pk_{base_name}_z{z}.txt")
+        folder = os.path.join("output", base_name)
+        os.makedirs(folder, exist_ok=True)
+        
+        # Create a subfolder for P(k) outputs inside the model folder
+        pk_subdir = os.path.join(folder, "pk")
+        os.makedirs(pk_subdir, exist_ok=True)
+        output_txt = os.path.join(pk_subdir, f"pk_{base_name}_z{z}.txt")
         np.savetxt(output_txt, np.column_stack([ks, pk_z]), header="k [h/Mpc]    P(k) [(Mpc/h)^3]")
+        
         print(f"Saved P(k) to {output_txt}")
 
     cosmo.struct_cleanup()  # Free memory
