@@ -5,21 +5,29 @@
  ---
  
  ## Project Structure
- ```
+```
  mock-galaxy-catalog/ 
- ├── config/ # YAML files for cosmological models
+ ├── config/ # YAML files for cosmological models 
  │ ├── planck_lcdm.yaml # Planck 2018 ΛCDM model 
  │ └── wowa.yaml # DESI-inspired w₀wₐCDM model 
  ├── src/ # Source code 
  │ ├── compute_power_spectrum.py 
- │ └── plot_power_spectrum.py 
- ├── output/ # Computed spectra and plots 
- │ ├── planck_lcdm/ 
+ │ ├── plot_power_spectrum.py 
+ │ ├── generate_gaussian_field.py 
+ │ ├── apply_log_normal.py 
+ │ └── plot_field.py 
+ ├── output/ # Model-specific outputs 
+ │ ├── planck_lcdm/ │ 
+ │ │ └── pk/ # Power spectrum txt files 
+ │ │ └── gaussian_field/ # Gaussian density fields 
+ │ │ └── lognormal_field/ # Log-normal transformed fields 
  │ └── wowa/ 
+ │ │ └── pk/ 
+ │ │ └── gaussian_field/ 
+ │ │ └── lognormal_field/ 
  ├── requirements.txt 
  └── README.md
- ```
- 
+```
  ---
  
  ## Setup
@@ -41,16 +49,16 @@
  Output files like:
 
  ``
- output/planck_lcdm/pk_pk_planck_lcdm_z0.txt
+ output/planck_lcdm/pk/pk_planck_lcdm_z0.txt
 ``
 
 ``
- output/planck_lcdm/pk_pk_planck_lcdm_z1.txt
+ output/planck_lcdm/pk/pk_planck_lcdm_z1.txt
 ``
  
  2. Plot Combined Spectra
  To plot all redshift power spectra for a given model:
- ```
+ ```bash
  python src/plot_power_spectrum.py output/planck_lcdm/pk
  ```
  
@@ -60,7 +68,47 @@
  output/planck_lcdm/pk/pk_planck_lcdm_multi_z.png
  ``
  
+ 3. Generate Gaussian fields
+ To transform each $P(k,z)$ into a real-space Gaussian field:
+  ```bash
+  python src/generate_gaussian_field.py output/planck_lcdm/pk
+  ```
+  
+  Saves to:
+
+ ``
+ output/planck_lcdm/gaussian_field/pk_planck_lcdm_z0.npy
+ ``
+
+ 4. Apply Log-Normal Transformation
+ To convert Gaussian fields into realistic, positively-defined density fields:
+  ```bash
+  python src/apply_log_normal.py output/planck_lcdm/gaussian_field
+  ```
+
+  Saves to:
+  ``
+  output/planck_lcdm/lognormal_field/pk_planck_lcdm_z0_lognormal.npy
+ ``
+
+ 5. Visualize Fields
+ To generate a grid of 2D slices:
+  ```bash
+ python src/plot_field.py output/planck_lcdm/gaussian_field
+ ```
+
+ or
+
+ ```bash
+ python src/plot_field.py output/planck_lcdm/lognormal_field
+ ```
+
+ The first one saves to:
  
+ ``
+ output/planck_lcdm/gaussian_field/field_grid.png
+ ``
+
  ---
  
  ## Included models
@@ -92,10 +140,9 @@
  ---
  
  ## What's next
- The next stage will involve:
- - Generating Gaussian fields from $P(k,z)$
- - Applying log-normal transformations
- - Constructing mock galaxy catalogs in redshift slices
+ The next stage will involve:s
+ - Using galaxy bias expansion to create a galaxy field
+ - Constructing mock galaxy catalogs with Poisson sampling
  
  ---
  
