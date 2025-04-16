@@ -145,7 +145,7 @@
  ---
  
  ## What's next
- The next stage will involve:s
+ The next stage will involve:
  - Using galaxy bias expansion to create a galaxy field
  - Constructing mock galaxy catalogs with Poisson sampling
  
