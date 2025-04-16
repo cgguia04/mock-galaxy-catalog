@@ -41,6 +41,7 @@
  
  ## Usage
  1. Compute the Power Spectrum
+
  To generate $P(k,z)$ from a YAML cosmology file:
  ```bash
  python src/compute_power_spectrum.py config/planck_lcdm.yaml
@@ -57,6 +58,7 @@
 ``
  
  2. Plot Combined Spectra
+
  To plot all redshift power spectra for a given model:
  ```bash
  python src/plot_power_spectrum.py output/planck_lcdm/pk
@@ -69,6 +71,7 @@
  ``
  
  3. Generate Gaussian fields
+
  To transform each $P(k,z)$ into a real-space Gaussian field:
   ```bash
   python src/generate_gaussian_field.py output/planck_lcdm/pk
@@ -81,6 +84,7 @@
  ``
 
  4. Apply Log-Normal Transformation
+
  To convert Gaussian fields into realistic, positively-defined density fields:
   ```bash
   python src/apply_log_normal.py output/planck_lcdm/gaussian_field
@@ -92,6 +96,7 @@
  ``
 
  5. Visualize Fields
+ 
  To generate a grid of 2D slices:
   ```bash
  python src/plot_field.py output/planck_lcdm/gaussian_field
