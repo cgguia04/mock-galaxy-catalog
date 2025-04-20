@@ -14,17 +14,18 @@
  │ ├── compute_power_spectrum.py 
  │ ├── plot_power_spectrum.py 
  │ ├── generate_gaussian_field.py 
- │ ├── apply_log_normal.py 
- │ └── plot_field.py 
+ │ ├── plot_field.py
+ │ ├── field_power_spectrum.py
+ │ └── galaxy_bias_expansion.py 
  ├── output/ # Model-specific outputs 
  │ ├── planck_lcdm/ │ 
  │ │ └── pk/ # Power spectrum txt files 
  │ │ └── gaussian_field/ # Gaussian density fields 
- │ │ └── lognormal_field/ # Log-normal transformed fields 
+ │ │ └── galaxy_field/ # Galaxy bias expansion
  │ └── wowa/ 
  │ │ └── pk/ 
  │ │ └── gaussian_field/ 
- │ │ └── lognormal_field/ 
+ │ │ └── galaxy_field/ 
  ├── requirements.txt 
  └── README.md
 ```
@@ -122,6 +123,7 @@ Saves to:
  6. Compute Power Spectrum of Galaxy Field
 
  Same procedure as Step 4.
+
  ---
  
  ## Included models
