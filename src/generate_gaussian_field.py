@@ -4,7 +4,7 @@ import os
 import sys
 from scipy.interpolate import interp1d
 
-def generate_gaussian_field(pk_file, box_size=500.0, n_grid=128): #Box size in Mpc/h; 128^3 grid points
+def generate_gaussian_field(pk_file, box_size=1000.0, n_grid=256): #Box size in Mpc/h; 128^3 grid points
     data = np.loadtxt(pk_file)  # Load P(k)
     k_vals, pk_vals = data[:, 0], data[:, 1]
 

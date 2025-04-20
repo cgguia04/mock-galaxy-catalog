@@ -82,38 +82,46 @@
  ``
  output/planck_lcdm/gaussian_field/pk_planck_lcdm_z0.npy
  ``
-
- 4. Apply Log-Normal Transformation
-
- To convert Gaussian fields into realistic, positively-defined density fields:
-  ```bash
-  python src/apply_log_normal.py output/planck_lcdm/gaussian_field
-  ```
-
-  Saves to:
-  ``
-  output/planck_lcdm/lognormal_field/pk_planck_lcdm_z0_lognormal.npy
- ``
-
- 5. Visualize Fields
  
- To generate a grid of 2D slices:
+ To plot a grid of 2D slices:
+
   ```bash
  python src/plot_field.py output/planck_lcdm/gaussian_field
  ```
 
- or
-
- ```bash
- python src/plot_field.py output/planck_lcdm/lognormal_field
- ```
-
- The first one saves to:
+Saves to:
  
  ``
  output/planck_lcdm/gaussian_field/field_grid.png
  ``
 
+4. Plot Power Spectrum of Fields
+
+   ```bash
+   python src/field_power_spectrum.py output/planck_lcdm/gaussian_field
+   ```
+
+   Saves to:
+    ``
+ output/planck_lcdm/gaussian_field/field_power_spectrum.png
+ ``
+
+ This also prints the means and variances of each field as a sanity check.
+
+ 5. Generate Galaxy Field via Bias Expansion
+
+ ```bash
+   python src/galaxy_bias_expansion.py output/planck_lcdm/gaussian_field
+ ```
+
+ Saves to:
+    ``
+ output/planck_lcdm/galaxy_field/pk_planck_lcdm_z0_galaxy.npy
+ ``
+
+ 6. Compute Power Spectrum of Galaxy Field
+
+ Same procedure as Step 4.
  ---
  
  ## Included models
