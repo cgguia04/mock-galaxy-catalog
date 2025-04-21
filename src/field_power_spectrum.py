@@ -43,7 +43,7 @@ def compute_power_spectrum(field, box_size):
 
     k_min = k_mag_nonzero.min()
     k_max = np.pi * n_grid / box_size  # Nyquist frequency
-    k_bins = np.logspace(np.log10(k_min), np.log10(k_max), num=10)
+    k_bins = np.logspace(np.log10(k_min), np.log10(k_max), num=6)
 
 
     # Bin power spectrum by |k| to get P(k)

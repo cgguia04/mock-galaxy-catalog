@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import sys
+from scipy.interpolate import RegularGridInterpolator
 
 # Reference: Schmittfull et al. (2019)
 def extract_redshift(filename):
@@ -30,26 +31,28 @@ def displace_field(field, psi1):
     Displace a Lagrangian field O(q) to Eulerian space (where galaxies are observed):
     Implements the shifted operator (Eq. 17)
     Õ(x) where x = q + ψ1(q) (Eq. 16)
-    We use nearest-grid-point (NGP) assignment, i.e. displaced field is assigned to the nearest grid point.
+    Uses cloud-in-cell (CIC) interpolation for higher accuracy.
     """
     n_grid = field.shape[0] # size of x axis (same as y and z)
-    coords = np.indices((n_grid, n_grid, n_grid), dtype=float)
+    grid = np.arange(n_grid)
+
+    interpolator = RegularGridInterpolator((grid, grid, grid), field, bounds_error=False, fill_value=0)
+    coords = np.indices((n_grid, n_grid, n_grid), dtype=float)  # shape (3, n, n, n)
     displaced = coords + psi1  # shape (3, n, n, n)
     for i in range(3):
         displaced[i] = np.mod(displaced[i], n_grid)  # Periodic boundaries: mod(n) wraps around
 
-    displaced_idx = np.floor(displaced).astype(int)   # NGP: nearest grid point
-    displaced_idx = np.clip(displaced_idx, 0, n_grid - 1) #index can't go below 0 and above n_gri-1
-    x, y, z = displaced_idx
-    shifted_field = np.zeros_like(field)    # field of zeros
-    shifted_field[x, y, z] += field # Eq. 17 integral (numerical summation)
-    return shifted_field
+    points = np.stack([displaced[0].ravel(), displaced[1].ravel(), displaced[2].ravel()], axis=-1)  # shape (n^3, 3)
+    values = interpolator(points).reshape((n_grid, n_grid, n_grid)) #gives O(x) and reshapes to 3D grid
+    return values
 
-def galaxy_bias_field(delta, box_size, b1=1.5, b2=0.5):
+def galaxy_bias_field(delta, box_size, b1, b2, bG2, n_bar):
     """
-    Construct δh(x) = b1 * δ̃1(x) + b2 * δ̃2(x)
+    Construct δh(x) = b1 * δ̃1(x) + b2 * δ̃2(x) + bG2 * G̃2(x) + ε(x)
     - δ̃1(x): shifted linear field
     - δ̃2(x): shifted version of (δ^2 - <δ^2>)
+    - G̃2(x): shifted version of the tidal operator
+    - ε(x): shot noise
     Based on Equation (16)
     """
     n_grid = delta.shape[0]
@@ -65,12 +68,46 @@ def galaxy_bias_field(delta, box_size, b1=1.5, b2=0.5):
     delta_squared = delta**2
     delta_squared -= np.mean(delta_squared) # Eq. 8 and 9 
 
+    # Tidal operator G2
+    kf = 2 * np.pi / box_size   
+    k = np.fft.fftfreq(n_grid, d=1.0 / n_grid) * kf
+    kx, ky, kz = np.meshgrid(k, k, k, indexing='ij')
+    k_squared = kx**2 + ky**2 + kz**2
+    k_squared[0, 0, 0] = 1
+
+    # Poisson equation implicit in Eq. 10: ∇^2 φ(q) = δ(q)
+    phi_k = -delta_k / k_squared    # gravitational potential
+    phi = np.fft.ifftn(phi_k).real  # Inverse FFT to real space
+
+    tidal_tensor = {} # Nested loop to define all tensor components
+    for i, ki in enumerate([kx, ky, kz]):
+        for j, kj in enumerate([kx, ky, kz]):
+            Tij_k = -(ki * kj * phi_k) # second derivative in Fourier space w.r.t i, j
+            Tij_x = np.fft.ifftn(Tij_k).real    # converts to real space
+            tidal_tensor[(i, j)] = Tij_x    # stores in dictionary
+
+    laplacian_phi = np.fft.ifftn(-k_squared * phi_k).real   # Trace of tidal tensor
+    trace_squared = laplacian_phi**2    # Second term of Eq. 10
+    tidal_squared = sum(tidal_tensor[(i, j)]**2 for i in range(3) for j in range(3))   #First term of Eq. 10
+    G2 = tidal_squared - trace_squared  # Eq. 10
+    G2 -= np.mean(G2)   # Theoretically, G2 has zero mean already at large scales (Footnote 3)
+
     # Shift fields from Lagrangian q to Eulerian x using ψ1
     delta_shifted = displace_field(delta, psi1)
     delta2_shifted = displace_field(delta_squared, psi1)
+    G2_shifted = displace_field(G2, psi1)
 
     # Equation (16): bias expansion in real space
-    delta_h = b1 * delta_shifted + b2 * delta2_shifted
+    delta_h = b1 * delta_shifted + b2 * delta2_shifted + bG2 * G2_shifted
+
+    # Add shot noise term ε(x) ~ N(0, 1/n̄) if specified
+    if n_bar is not None:
+        volume = box_size**3
+        voxel_volume = volume / n_grid**3
+        noise_std = np.sqrt(1 / (n_bar * voxel_volume))  # Gaussian std per voxel
+        epsilon = np.random.normal(loc=0.0, scale=noise_std, size=delta.shape)  # scale such that P(k) is 1/n_bar; 3d grid.
+        delta_h += epsilon  # stochastic component
+
     return delta_h
 
 def main():
@@ -88,7 +125,8 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
 
     box_size = 500.0
-    b1, b2 = 1.5, 0.5   #adjustable bias parameters
+    b1, b2, bG2 = 1.5, 0.5, 0.5   #adjustable bias parameters
+    n_bar = None
 
     for filename in sorted(os.listdir(input_dir)):
         if filename.endswith(".npy"):
@@ -101,7 +139,7 @@ def main():
 
             print(f"Computing δ_h for z = {z} using shifted operators (Eq. 16)")
 
-            delta_h = galaxy_bias_field(delta, box_size, b1, b2)
+            delta_h = galaxy_bias_field(delta, box_size, b1, b2, bG2, n_bar=n_bar)
 
             base = os.path.splitext(filename)[0]
             output_file = os.path.join(output_dir, f"{base}_galaxy.npy")
