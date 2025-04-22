@@ -66,7 +66,7 @@ def galaxy_bias_field(delta, box_size, b1, b2, bG2, n_bar):
 
     # Bias operators in Lagrangian space
     delta_squared = delta**2
-    delta_squared -= np.mean(delta_squared) # Eq. 8 and 9 
+    delta_squared -= np.mean(delta_squared) # Eq. 8 and 9
 
     # Tidal operator G2
     kf = 2 * np.pi / box_size   
@@ -108,6 +108,8 @@ def galaxy_bias_field(delta, box_size, b1, b2, bG2, n_bar):
         epsilon = np.random.normal(loc=0.0, scale=noise_std, size=delta.shape)  # scale such that P(k) is 1/n_bar; 3d grid.
         delta_h += epsilon  # stochastic component
 
+    delta_h -= np.mean(delta_h)  # Remove mean to avoid bias
+    
     return delta_h
 
 def main():
@@ -124,9 +126,9 @@ def main():
     output_dir = os.path.join(model_dir, "galaxy_field")
     os.makedirs(output_dir, exist_ok=True)
 
-    box_size = 500.0
-    b1, b2, bG2 = 1.5, 0.5, 0.5   #adjustable bias parameters
-    n_bar = None
+    box_size = 1000.0
+    b1, b2, bG2 = 1.2, -0.405, -0.127   #b1 from DESI 2016 BSG Figure 3.4, scaling from Chen et al. (2019)
+    n_bar = 1e-3  # DESI DR2 BGS number density Figure 3
 
     for filename in sorted(os.listdir(input_dir)):
         if filename.endswith(".npy"):

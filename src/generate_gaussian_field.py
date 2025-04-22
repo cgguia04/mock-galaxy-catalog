@@ -7,6 +7,8 @@ from scipy.interpolate import interp1d
 def generate_gaussian_field(pk_file, box_size=1000.0, n_grid=256): #Box size in Mpc/h; 128^3 grid points
     data = np.loadtxt(pk_file)  # Load P(k)
     k_vals, pk_vals = data[:, 0], data[:, 1]
+    volume = box_size**3
+    pk_vals /= volume
 
     # Interpolation: don't crash outside k_vals range but assume P(k)=0
     pk_interp = interp1d(k_vals, pk_vals, bounds_error=False, fill_value=0) 
@@ -27,7 +29,11 @@ def generate_gaussian_field(pk_file, box_size=1000.0, n_grid=256): #Box size in 
     field_k = noise * amplitude #correctly scaled noise
     
     field_k[0, 0, 0] = 0.0  # Set zero mode to 0 (remove biased background)
-    field_real = np.fft.ifftn(field_k).real # Inverse FFT to get real-space field
+    field_real = np.fft.ifftn(field_k, norm="forward").real # Inverse FFT to get real-space field
+
+    print("Field variance (real space):", np.var(field_real))
+    print("Field mean (real space):", np.mean(field_real))
+    print("Typical P(k):", np.median(pk_interp(k_mag)))
 
     return field_real
 

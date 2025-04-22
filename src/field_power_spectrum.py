@@ -14,7 +14,7 @@ def extract_redshift(filename):
         return None
 
 def compute_power_spectrum(field, box_size):
-    field_k = np.fft.fftn(field)    # real space to Fourier space: δ(k)
+    field_k = np.fft.fftn(field, norm="forward")    # real space to Fourier space: δ(k)
     power = np.abs(field_k)**2  # P(k) = |δ(k)|^2
 
     # k-grid
@@ -43,7 +43,7 @@ def compute_power_spectrum(field, box_size):
 
     k_min = k_mag_nonzero.min()
     k_max = np.pi * n_grid / box_size  # Nyquist frequency
-    k_bins = np.logspace(np.log10(k_min), np.log10(k_max), num=6)
+    k_bins = np.logspace(np.log10(k_min), np.log10(k_max), num=7)
 
 
     # Bin power spectrum by |k| to get P(k)

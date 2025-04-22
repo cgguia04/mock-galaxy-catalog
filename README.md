@@ -1,4 +1,4 @@
-# Generating Mock Galaxy Catalogs to Recover Cosmological Parameters
+# Generating Mock Galaxy Catalogs
  
  This project computes the matter power spectrum $P(k, z)$ using CLASS (via `classy`) for multiple cosmological models — including Planck 2018 ΛCDM and a DESI DR2–inspired $w_0w_a$ dark energy model. It outputs power spectra across redshifts and visualizes how structure grows over time.
  
