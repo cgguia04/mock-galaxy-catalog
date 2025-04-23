@@ -1,5 +1,19 @@
 CLASS-PT/
 class_public/
+writeup/aux_files/
 venv/
 __pycache__/
 .DS_Store
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.bbl
+*.blg
+*.out
+*.toc
+*.lof
+*.lot
+*.synctex.gz
+*.fdb_latexmk
+*.fls

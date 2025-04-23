@@ -114,12 +114,6 @@ Saves to:
  output/planck_lcdm/gaussian_field/field_power_spectrum.png
  ``
 
- and .txt files of the power spectra at each redshift. For example:
-
- ``
- output/planck_lcdm/gaussian_field/pk_planck_lcdm_z0.txt
- ``
-
  This also prints the means and variances of each field as a sanity check.
 
  5. Generate Galaxy Field via Bias Expansion
@@ -202,13 +196,6 @@ w0wa_classpt.py
  - Redshifts are defined in YAML with `z_pk: [0, 0.5, 1, 2, 3]`
  - CLASS expects `z_pk` as a space-separated string — this is handled automatically in Python
  - Each model’s results are saved in `output/[model_name]`
- 
- ---
- 
- ## What's next
- The next stage will involve:
- - Using galaxy bias expansion to create a galaxy field
- - Constructing mock galaxy catalogs with Poisson sampling
  
  ---
  

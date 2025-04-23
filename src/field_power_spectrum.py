@@ -87,11 +87,6 @@ def main():
         print(f"z = {z:.2f}: Mean = {np.mean(field):.5f}, Variance = {np.var(field):.5f}")
 
         k_vals, pk_vals = compute_power_spectrum(field, box_size)
-        
-        output_txt_path = os.path.join(input_dir, f"{os.path.splitext(filename)[0]}.txt")
-        np.savetxt(output_txt_path, np.column_stack((k_vals, pk_vals)), header="k [h/Mpc]   P(k) [(Mpc/h)^3]")
-        print(f"Saved power spectrum to {output_txt_path}")
-        
         plt.loglog(k_vals, pk_vals, label=f"z = {z}")
 
     plt.xlabel(r"$k \, [h/\mathrm{Mpc}]$")
