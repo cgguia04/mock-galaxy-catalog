@@ -104,9 +104,9 @@ Saves to:
 
 4. Plot Power Spectrum of Fields
 
-   ```bash
-   python src/field_power_spectrum.py output/planck_lcdm/gaussian_field
-   ```
+```bash
+python src/field_power_spectrum.py output/planck_lcdm/gaussian_field
+```
 
 Saves to:
 
@@ -125,7 +125,7 @@ Saves to:
  5. Generate Galaxy Field via Bias Expansion
 
  ```bash
-   python src/galaxy_bias_expansion.py output/planck_lcdm/gaussian_field
+ python src/galaxy_bias_expansion.py output/planck_lcdm/gaussian_field
  ```
 
  Saves to:
@@ -142,7 +142,7 @@ Saves to:
  7. Generate Perturbation Theory Predictions
 
 ```bash
-   python src/planck_lcdm_classpt.py
+python src/planck_lcdm_classpt.py
  ```
 
  Saves to:
@@ -183,7 +183,7 @@ Saves to:
 ``
  planck_lcdm_classpt.py
  ``
-
+ 
  ``
 w0wa_classpt.py
  ``
