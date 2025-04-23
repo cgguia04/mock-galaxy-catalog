@@ -60,7 +60,7 @@ for z in z_vals:
     np.savetxt(fname_txt, np.column_stack((k, Pk_gg)), header="k [h/Mpc]   P(k) [(Mpc/h)^3]")
     print(f"Saved {fname_txt}")
 
-    color = z_colors.get(z, "black")  # fallback is black
+    color = z_colors.get(str(z), "black")  # fallback is black
     plt.loglog(k, Pk_gg, label=f"z = {z}", color=color, linewidth=2)
     cosmo.struct_cleanup()
     cosmo.empty()
