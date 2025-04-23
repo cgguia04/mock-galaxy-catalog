@@ -3,6 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import sys
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+
+z_vals = ["0", "0.5", "1", "2", "3"]
+full_cmap = cm.get_cmap("OrRd")
+sliced_cmap = [full_cmap(i) for i in np.linspace(0.4, 1.0, len(z_vals))]
+colormap = cm.get_cmap("OrRd", len(z_vals)) 
+z_colors = {z: sliced_cmap[i] for i, z in enumerate(z_vals)}
+
 
 # Extract model name from the script name
 script_name = os.path.basename(sys.argv[0])
@@ -63,16 +72,29 @@ for z in z_vals:
     np.savetxt(fname_txt, np.column_stack((k, Pk_gg)), header="k [h/Mpc]   P(k) [(Mpc/h)^3]")
     print(f"Saved {fname_txt}")
 
-    plt.loglog(k, Pk_gg, label=f"z = {z}")
+    color = z_colors.get(str(z), "black")  # fallback is black
+    plt.loglog(k, Pk_gg, label=f"z = {z}", color=color, linewidth=2)
     cosmo.struct_cleanup()
     cosmo.empty()
+
+plt.rcParams.update({
+    "text.usetex": True,  
+    "font.family": "serif",
+    "font.size": 14,
+    "axes.labelsize": 16,
+    "axes.titlesize": 17,
+    "legend.fontsize": 13,
+    "xtick.labelsize": 13,
+    "ytick.labelsize": 13,
+    "lines.linewidth": 2,
+    })
 
 plt.xlabel(r"$k \, [h/\mathrm{Mpc}]$")
 plt.ylabel(r"$P_{gg}(k) \, [(\mathrm{Mpc}/h)^3]$")
 plt.title("Galaxy Power Spectrum from CLASS-PT")
-plt.grid(True)
+plt.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.7)
+plt.tight_layout(pad=1.5)
 plt.legend()
-plt.tight_layout()
 
 # Save figure using script name
 plot_path = os.path.join(outdir, f"pk_{model_name}_classpt.png")

@@ -3,6 +3,14 @@ import os
 import sys
 import matplotlib.pyplot as plt
 from scipy.stats import binned_statistic
+from matplotlib import cm
+
+z_vals = ["0", "0.5", "1", "2", "3"]
+full_cmap = cm.get_cmap("OrRd")
+sliced_cmap = [full_cmap(i) for i in np.linspace(0.4, 1.0, len(z_vals))]
+colormap = cm.get_cmap("OrRd", len(z_vals)) 
+z_colors = {z: sliced_cmap[i] for i, z in enumerate(z_vals)}
+
 
 def extract_redshift(filename):
     try:
@@ -87,20 +95,24 @@ def main():
         print(f"z = {z:.2f}: Mean = {np.mean(field):.5f}, Variance = {np.var(field):.5f}")
 
         k_vals, pk_vals = compute_power_spectrum(field, box_size)
-        plt.loglog(k_vals, pk_vals, label=f"z = {z}")
+        z_part = z_vals[int(z)]
+        label = f"$z = {z_part}$"
+        color = z_colors.get(z_part, "black")  # fallback is black
+        plt.loglog(k_vals, pk_vals, label=label, color=color, linewidth=2)
 
     plt.xlabel(r"$k \, [h/\mathrm{Mpc}]$")
     plt.ylabel(r"$P_{gg}(k) \, [(\mathrm{Mpc}/h)^3]$")
-    plt.title("Power Spectrum")
+    plt.title("Power Spectrum $P(k)$ Across Redshifts", pad=10)
     plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
+    plt.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.7)
+    plt.tight_layout(pad=1.5)
 
     # Save figure in the same directory
     output_path = os.path.join(input_dir, "field_power_spectrum.png")
     plt.savefig(output_path)
     print(f"Saved plot to: {output_path}")
     plt.close()
+    plt.show()
 
 if __name__ == "__main__":
     main()
