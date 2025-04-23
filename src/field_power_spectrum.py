@@ -45,7 +45,7 @@ def compute_power_spectrum(field, box_size):
 
     k_min = k_mag_nonzero.min()
     k_max = np.pi * n_grid / box_size  # Nyquist frequency
-    k_bins = np.logspace(np.log10(k_min), np.log10(k_max), num=8)
+    k_bins = np.logspace(np.log10(k_min), np.log10(k_max), num=7)
 
 
     # Bin power spectrum by |k| to get P(k)
@@ -87,10 +87,15 @@ def main():
         print(f"z = {z:.2f}: Mean = {np.mean(field):.5f}, Variance = {np.var(field):.5f}")
 
         k_vals, pk_vals = compute_power_spectrum(field, box_size)
+        
+        output_txt_path = os.path.join(input_dir, f"{os.path.splitext(filename)[0]}.txt")
+        np.savetxt(output_txt_path, np.column_stack((k_vals, pk_vals)), header="k [h/Mpc]   P(k) [(Mpc/h)^3]")
+        print(f"Saved power spectrum to {output_txt_path}")
+        
         plt.loglog(k_vals, pk_vals, label=f"z = {z}")
 
     plt.xlabel(r"$k \, [h/\mathrm{Mpc}]$")
-    plt.ylabel(r"$P(k)$ (arbitrary units)")
+    plt.ylabel(r"$P_{gg}(k) \, [(\mathrm{Mpc}/h)^3]$")
     plt.title("Power Spectrum")
     plt.legend()
     plt.grid(True)

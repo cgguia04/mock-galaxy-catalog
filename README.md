@@ -1,6 +1,6 @@
 # Generating Mock Galaxy Catalogs
  
- This project computes the matter power spectrum $P(k, z)$ using CLASS (via `classy`) for multiple cosmological models — including Planck 2018 ΛCDM and a DESI DR2–inspired $w_0w_a$ dark energy model. It outputs power spectra across redshifts and visualizes how structure grows over time.
+ This project computes the matter power spectrum $P(k, z)$ using CLASS (via `classy`) for two cosmological models — Planck 2018 ΛCDM and a DESI DR2–inspired $w_0w_a$ dark energy model. It outputs the power spectra of Gaussian fields and galaxy fields after bias expansion. These can respectively be compared with the standard power spectra from CLASS and CLASS-PT.
  
  ---
  
@@ -16,17 +16,23 @@
  │ ├── generate_gaussian_field.py 
  │ ├── plot_field.py
  │ ├── field_power_spectrum.py
- │ └── galaxy_bias_expansion.py 
+ │ ├── galaxy_bias_expansion.py 
+ │ ├── planck_lcdm_classpt.py
+ │ └── w0wa_classpt.py
  ├── output/ # Model-specific outputs 
  │ ├── planck_lcdm/ │ 
- │ │ └── pk/ # Power spectrum txt files 
- │ │ └── gaussian_field/ # Gaussian density fields 
- │ │ └── galaxy_field/ # Galaxy bias expansion
+ │ │ ├── pk/ # Power spectrum txt files 
+ │ │ ├── gaussian_field/ # Gaussian density fields 
+ │ │ ├── galaxy_field/ # Galaxy bias expansion
+ │ │ └── classpt/ #Perturbation theory prediction
  │ └── wowa/ 
- │ │ └── pk/ 
- │ │ └── gaussian_field/ 
- │ │ └── galaxy_field/ 
+ │ │ ├── pk/ 
+ │ │ ├── gaussian_field/ 
+ │ │ ├── galaxy_field/ 
+ │ │ └── classpt/ 
  ├── requirements.txt 
+ ├── run_pipeline.sh #Run all
+ ├── writeup
  └── README.md
 ```
  ---
@@ -103,8 +109,15 @@ Saves to:
    ```
 
    Saves to:
+
     ``
  output/planck_lcdm/gaussian_field/field_power_spectrum.png
+ ``
+
+ and .txt files of the power spectra at each redshift. For example:
+
+ ``
+ output/planck_lcdm/gaussian_field/pk_planck_lcdm_z0.txt
  ``
 
  This also prints the means and variances of each field as a sanity check.
@@ -116,6 +129,7 @@ Saves to:
  ```
 
  Saves to:
+
     ``
  output/planck_lcdm/galaxy_field/pk_planck_lcdm_z0_galaxy.npy
  ``
@@ -123,10 +137,31 @@ Saves to:
  6. Compute Power Spectrum of Galaxy Field
 
  Same procedure as Step 4.
+ 
+
+ 7. Generate Perturbation Theory Predictions
+
+```bash
+   python src/planck_lcdm_classpt.py
+ ```
+
+ Saves to:
+
+  ``
+  output/planck_lcdm/classpt/
+  ``
+
+  0. To Run the Full Pipeline, 
+
+  ```bash
+  ./run_pipeline.sh
+  ```
+
 
  ---
  
  ## Included models
+
  ``
  planck_lcdm.yaml
  ``
@@ -145,6 +180,22 @@ Saves to:
  - $w_a = -0.1$ (adjusted from DESI’s best-fit to avoid CLASS instability)
  - `use_ppf: yes` to safely evolve through the phantom divide
  
+``
+ planck_lcdm_classpt.py
+ ``
+
+ ``
+w0wa_classpt.py
+ ``
+
+ Calibrated to Planck 2018 and DESI DR2, respectively, with galaxy bias parameters and shot noise, excluding 1-loop corrections. 
+
+ - $b_1 = 1.2$
+ - $b_2 = -0.405$
+ - $b_{G2} = -0.127$
+ - $P_{\text{shot}} = 1000$
+ - $c_{s0} = c_{s2} = c_{s4} = b_3 = b_4 = 0.0$
+
  ---
  
  ## Notes
