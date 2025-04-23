@@ -108,9 +108,9 @@ Saves to:
    python src/field_power_spectrum.py output/planck_lcdm/gaussian_field
    ```
 
-   Saves to:
+Saves to:
 
-    ``
+``
  output/planck_lcdm/gaussian_field/field_power_spectrum.png
  ``
 
@@ -129,8 +129,8 @@ Saves to:
  ```
 
  Saves to:
-
-    ``
+ 
+ ``
  output/planck_lcdm/galaxy_field/pk_planck_lcdm_z0_galaxy.npy
  ``
 
@@ -146,10 +146,10 @@ Saves to:
  ```
 
  Saves to:
-
-  ``
-  output/planck_lcdm/classpt/
-  ``
+ 
+ ``
+ output/planck_lcdm/classpt/
+ ``
 
   0. To Run the Full Pipeline, 
 
