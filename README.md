@@ -171,7 +171,7 @@ python src/planck_lcdm_classpt.py
  
  DESI DR2–inspired evolving dark energy model:
  - $w_0 = -0.838$
- - $w_a = -0.1$ (adjusted from DESI’s best-fit to avoid CLASS instability)
+ - $w_a = -0.62$ 
  - `use_ppf: yes` to safely evolve through the phantom divide
  
 ``
